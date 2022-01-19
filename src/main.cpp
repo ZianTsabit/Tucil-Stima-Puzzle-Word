@@ -11,6 +11,8 @@
 
 using namespace std;
 
+const int minLength = 2;
+const int maxLength = 50;
 
 int N = 0; // jumlah baris
 int M = 0; // jumlah kolom 
@@ -26,7 +28,7 @@ void printHasil();
 
 
 void printPuzzles();
-void printKata();
+void printDaftarKata();
 
 
 int main(){
@@ -34,12 +36,19 @@ int main(){
     
     cout<<endl;
     
-    bacaPuzzle("input_file.txt");
+    bacaPuzzle("input_puzzle.txt");
     printPuzzles();
     
     cout<<endl;
     
     cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
+    
+    bacaDaftarKata("input_kata.txt");
+    
+    printDaftarKata();
+
+    cout<<endl;
+    cout<<"Hasil...";
 
 }
 
@@ -62,16 +71,12 @@ void bacaPuzzle(string filename){
 
             puzzle.push_back(row);
         }
-
-        
         pzlReader.close();
-
     }
 }
 
 void printPuzzles(){
     
-
     for (int i=0; i< N; i++){
         vector<char> row = puzzle[i];
         for (int j = 0; j < M; j++){
@@ -82,34 +87,37 @@ void printPuzzles(){
     } 
 }
 
-// bool isKata(string str){
-//     int count = 0;
-//     for (int i = 0; i < str.size(); i++){
-//         if (str[i] < 'A' || str[i] > 'Z'){
-//             return false;
-//         }else{
-//             count++;
-//         }
-//     }
-// }
+bool isKata(string str){
+    int count = 0;
+    for (int i = 0; i < str.size(); i++){
+        if (str[i] < 'A' || str[i] > 'Z'){
+            return false;
+        }else{
+            count++;
+        }
+    }
+    return (count >= minLength) && (count <= maxLength);
+}
 
-// void bacaDaftarKata(string filename){
-//     ifstream ktReader(filename);
+void bacaDaftarKata(string filename){
+    ifstream ktReader(filename);
 
-//     string kata;
-//     if (ktReader.is_open()){
-//         while (getline(ktReader, kata)){
-//             if (isKata(kata)){
-//                 wordlist.insert(kata);
-//             }
-//         }
-//         ktReader.close();
-//     }
-// }
+    string kata;
+    if (ktReader.is_open()){
+        while (getline(ktReader, kata)){
+            // if (isKata(kata)){
+               
+            // }
+            wordlist.insert(kata);
+        }
+        ktReader.close();
+    }
+}
 
-// void printKata(){
-//     for (auto const& i: wordlist){
-//         cout<< i << " ";
-//     }
-//     cout << endl;
-// }
+void printDaftarKata(){
+    unordered_set<string> :: iterator itr;
+    for (itr = wordlist.begin(); itr != wordlist.end(); itr++){
+        cout<< (*itr) <<endl;
+    }
+    cout << endl;
+}
