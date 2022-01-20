@@ -5,6 +5,7 @@
 #include <algorithm> // hapus kata dari spasi
 #include <ostream>
 #include <cstdlib>
+#include <filesystem>
 
 #include <unordered_set>
 #include <set>
@@ -26,7 +27,7 @@ set<string> words;
 
 void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
-void cariKata(vector<vector<char>> puzzle);
+void cariKata(vector<vector<char>> puzzle, string word);
 void printKata(string filename);
 
 
@@ -61,42 +62,42 @@ int main(){
     cout<<"                  oleh : Ghazian Tsabit Alkamil                " <<endl;
     cout<<"                                                               " <<endl;
     cout<<"                                                               " <<endl;
-    
-
     cout<<endl;
     
     string filepath;
+    string finalpath;
     cout<<"input path file: ";
-    
     cin>>filepath;
+    finalpath = "../test/"+filepath;
+    
+    if (std::filesystem::exists(finalpath)){
+        bacaPuzzle(finalpath);
 
-    bacaPuzzle("../test/"+filepath);
+        cout<<endl;
+        cout<<"===============PUZZLE==============="<<endl;
+        cout<<endl;
+        printPuzzles();
     
-    cout<<endl;
+        
+        cout<<endl;
+        cout<<"==============WORD LIST=============" <<endl;
+    
+        bacaDaftarKata(finalpath);
+        cout<<endl;
+        printDaftarKata();
+        cout<<endl;
+        cout<<"================RESULT==============" <<endl;
+        cout<<endl;
+        cout<<"Loading...";
+        cout<<endl;
+        for (int i = 0; i < wordlist.size(); i++){
+            cariKata(puzzle,wordlist[i]);
+        }
+        
 
-    printPuzzles();
-    
-    cout<<endl;
-    
-    cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
-    
-    cout<<endl;
-    
-    bacaDaftarKata("../test/"+filepath);
-    
-    printDaftarKata();
-
-    cout<<"Hasil...";
-
-    cout<<endl;
-    
-    cariKata(puzzle);
-    
-    cout<<endl;
-
-    printHasil();
-    
-    
+    }else{
+        cout<<"file tidak tersedia, pastikan nama file sudah tepat !"<<endl;
+    }
 }
 
 // FUNGSI UNTUK MEMBACA PUZZLE DARI INPUT FILE
@@ -234,15 +235,16 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word){
     return false;
 }
 
-void cariKata(vector<vector<char>> pzl){
+void cariKata(vector<vector<char>> pzl, string word){
     
-    bool status = false;
     for (int row = 0; row < N; row++){
         for (int col = 0; col < M; col++){
-            if (search2D(puzzle, row, col, wordlist[0])){
-                status = true;
+            if (search2D(puzzle, row, col, word)){
+                printHasil();
+                answers = temp;
+                cout<<endl;
             }
         } 
-    } 
+    }
 }
 
