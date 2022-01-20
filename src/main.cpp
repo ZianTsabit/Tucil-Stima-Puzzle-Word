@@ -36,7 +36,7 @@ int main(){
     
     cout<<endl;
     
-    bacaPuzzle("input_puzzle.txt");
+    bacaPuzzle("../test/input_puzzle.txt");
     printPuzzles();
     
     cout<<endl;
@@ -44,7 +44,7 @@ int main(){
     cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
     cout<<endl;
     
-    bacaDaftarKata("input_puzzle.txt");
+    bacaDaftarKata("../test/input_puzzle.txt");
     
     printDaftarKata();
 
