@@ -17,14 +17,14 @@ const int maxLength = 50;
 int N = 0; // jumlah baris
 int M = 0; // jumlah kolom 
 
-unordered_set<string> wordlist;		// unordered list untuk menyimpan kata yang ingin dicari	
+vector<string> wordlist;		// unordered list untuk menyimpan kata yang ingin dicari	
 vector<vector<char>> puzzle;        // array dua dimensi untuk menyimpan puzzle
 vector<vector<char>> jawaban;      
 set<string> words;
 
 void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
-void cariKata();
+void cariKata(vector<vector<char>> puzzle);
 void printKata(string filename);
 
 
@@ -51,12 +51,15 @@ int main(){
     printDaftarKata();
 
     cout<<"Hasil...";
-    
-    
     cout<<endl;
+    cariKata(puzzle);
+    
+    
+    
+    // cout<<endl;
 
-    cariKata();
-    printKata("../test/answers.txt");
+    // cariKata();
+    // printKata("../test/answers.txt");
 
 }
 
@@ -104,19 +107,6 @@ void printPuzzles(){
     } 
 }
 
-// bool isKata(string str){
-//     int count = 0;
-//     for (int i = 0; i < str.size(); i++){
-//         if (str[i] < 'A' || str[i] > 'Z'){
-//             return false;
-//         }else{
-//             count++;
-//         }
-//     }
-//     return (count >= minLength) && (count <= maxLength);
-// }
-
-
 // FUNGSI UNTUK MEMBACA DAFTAR KATA YANG HARUS DICARI DARI INPUT FILE
 
 void bacaDaftarKata(string filename){
@@ -129,7 +119,7 @@ void bacaDaftarKata(string filename){
         while (getline(ktReader, kata)){
             if (kata.size() == 1){
                 while(getline(ktReader, kata)){
-                    wordlist.insert(kata);
+                    wordlist.push_back(kata);
                 }
             }
         }
@@ -140,11 +130,9 @@ void bacaDaftarKata(string filename){
 // FUNGSI UNTUK MENAMPILKAN DAFTAR KATA YANG HARUS DICARI KE LAYAR
 
 void printDaftarKata(){
-    unordered_set<string> :: iterator itr;
-    for (itr = wordlist.begin(); itr != wordlist.end(); itr++){
-        cout<< (*itr) <<endl;
-    }
-    cout << endl;
+    for (int i=0; i< wordlist.size(); i++){
+        cout<<wordlist[i]<<endl;
+    } 
 }
 
 // FUNGSI MIN ANTAR DUA INTEGER
@@ -156,62 +144,86 @@ int min(int a, int b){
     return b;
 }
 
-// FUNGSI UNTUK MEMERIKSA APAKAH SEBUAH KATA TERDAPAT PADA DAFTAR KATA
-
-void checkWord(string s){
-    
-    if (wordlist.count(s)){
-        words.insert(s);
-    }
-}
-
-
 // FUNGSI UNTUK MENCARI KATA PADA PUZZLE SECARA HORIZONTAL
 
-void cariHorizontal(int r, int c){
+// void cariHorizontal(int r, int c){
 
-    string test1 = "";
-    string test2 = "";
+//     string test1 = "";
+//     string test2 = "";
 
-    for (int i= 0; i < min(M-c,maxLength); i++){
-        test1 = test1 + puzzle[r][c+i];
-        test2 = puzzle[r][c+1] + test2;
-        if ((i+1) >= minLength){
-            checkWord(test1);
-            checkWord(test2);
-        }
-    }
-}
+//     for (int i= 0; i < min(M-c,maxLength); i++){
+//         test1 = test1 + puzzle[r][c+i];
+//         test2 = puzzle[r][c+1] + test2;
+//         if ((i+1) >= minLength){
+//             checkWord(test1);
+//             checkWord(test2);
+//         }
+//     }
+// }
 
 // FUNGSI UNTUK MENCARI KATA
 
-void cariKata(){
-    for (int r = 0; r < N; r++){
-        for (int c = 0; c < M; c++){
-            cariHorizontal(r, c);
-        }
-    }
-}
+// void cariKata(){
+//     for (int r = 0; r < N; r++){
+//         for (int c = 0; c < M; c++){
+//             cariHorizontal(r, c);
+//         }
+//     }
+// }
 
 // FUNGSI UNTUK MENAMPILKAN JAWABAN KE LAYAR
 
-void printKata(string filename){
-    ofstream wordprinter (filename);
-    if (wordprinter.is_open()){
-        for(auto const& i: words){
-            wordprinter << i  << endl;
-        }
-        wordprinter.close();
-    }
-}
+// void printKata(string filename){
+//     ofstream wordprinter (filename);
+//     if (wordprinter.is_open()){
+//         for(auto const& i: words){
+//             wordprinter << i  << endl;
+//         }
+//         wordprinter.close();
+//     }
+// }
 
 // BRUTE FORCE ALGORITHM
 
-void searchHorizontal(string s){
-    
-    
-    for(int i = 0; i <= M; i++){
-        int j;
+int x[] = { -1, -1, -1, 0, 0, 1, 1, 1 }; 
+int y[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
+bool search2D(vector<vector<char>> pzl, int row, int col, string word){
+    
+    
+    if(pzl[row][col] != word[0]){
+        return false;
     }
+
+    int len = word.length();
+
+    for (int dir = 0; dir < 8; dir++){
+        
+        int k, rd = row + x[dir], cd = col + y[dir];
+
+        for(k = 1; k< len; k++){
+            if (rd >= N || rd < 0 || cd >= M || cd < 0){
+                break;
+            }
+
+            if (pzl[rd][cd] != word[k]){
+                break;
+            }
+            rd += x[dir], cd += y[dir];
+        }
+        if(k == len){
+            return true;
+        }
+    }
+    return false;
+}
+
+void cariKata(vector<vector<char>> pzl){
+    for (int row = 0; row < N; row++){
+        for (int col = 0; col < M; col++){
+            if (search2D(puzzle, row, col, wordlist[0])){
+                cout << "text found"<<endl;
+            } 
+        } 
+    }         
 }
