@@ -42,6 +42,7 @@ int main(){
     cout<<endl;
     
     cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
+    cout<<endl;
     
     bacaDaftarKata("input_kata.txt");
     
@@ -59,6 +60,11 @@ void bacaPuzzle(string filename){
     
     if (pzlReader.is_open()){
         while (getline(pzlReader, line)){
+            
+            if(line.empty()){
+                break;
+            }
+
             if (N == 0){
                 M = (line.size()+1)/2; 
             }
@@ -68,7 +74,6 @@ void bacaPuzzle(string filename){
             for (int i=0; i < line.size(); i+=2){
                 row.push_back(line[i]);
             }
-
             puzzle.push_back(row);
         }
         pzlReader.close();
@@ -87,17 +92,17 @@ void printPuzzles(){
     } 
 }
 
-bool isKata(string str){
-    int count = 0;
-    for (int i = 0; i < str.size(); i++){
-        if (str[i] < 'A' || str[i] > 'Z'){
-            return false;
-        }else{
-            count++;
-        }
-    }
-    return (count >= minLength) && (count <= maxLength);
-}
+// bool isKata(string str){
+//     int count = 0;
+//     for (int i = 0; i < str.size(); i++){
+//         if (str[i] < 'A' || str[i] > 'Z'){
+//             return false;
+//         }else{
+//             count++;
+//         }
+//     }
+//     return (count >= minLength) && (count <= maxLength);
+// }
 
 void bacaDaftarKata(string filename){
     ifstream ktReader(filename);
@@ -105,9 +110,6 @@ void bacaDaftarKata(string filename){
     string kata;
     if (ktReader.is_open()){
         while (getline(ktReader, kata)){
-            // if (isKata(kata)){
-               
-            // }
             wordlist.insert(kata);
         }
         ktReader.close();

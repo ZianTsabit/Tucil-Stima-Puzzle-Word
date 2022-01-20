@@ -2,6 +2,8 @@
     "files.associations": {
         "*html": "html",
         "vector": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "xhash": "cpp",
+        "iostream": "cpp"
     }
 }
