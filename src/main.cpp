@@ -18,7 +18,9 @@ int N = 0; // jumlah baris
 int M = 0; // jumlah kolom 
 
 vector<string> wordlist;		// unordered list untuk menyimpan kata yang ingin dicari	
-vector<vector<char>> puzzle;        // array dua dimensi untuk menyimpan puzzle
+vector<vector<char>> kosong;
+vector<vector<char>> kosong1;    // array dua dimensi untuk menyimpan puzzle
+vector<vector<char>> puzzle;    // array dua dimensi untuk menyimpan puzzle
 vector<vector<char>> jawaban;      
 set<string> words;
 
@@ -29,6 +31,7 @@ void printKata(string filename);
 
 
 void printPuzzles();
+void printKosong();
 void printDaftarKata();
 
 // FUNGSI UTAMA PROGRAM
@@ -41,6 +44,8 @@ int main(){
     bacaPuzzle("../test/input_puzzle.txt");
     printPuzzles();
     
+    
+
     cout<<endl;
     
     cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
@@ -51,16 +56,16 @@ int main(){
     printDaftarKata();
 
     cout<<"Hasil...";
+
     cout<<endl;
+    
     cariKata(puzzle);
     
+    cout<<endl;
+
+    printKosong();
     
     
-    // cout<<endl;
-
-    // cariKata();
-    // printKata("../test/answers.txt");
-
 }
 
 // FUNGSI UNTUK MEMBACA PUZZLE DARI INPUT FILE
@@ -84,9 +89,12 @@ void bacaPuzzle(string filename){
             N++;
 
             vector <char> row;
+            vector <char> row1;
             for (int i=0; i < line.size(); i+=2){
                 row.push_back(line[i]);
+                row1.push_back('-');
             }
+            kosong.push_back(row1);
             puzzle.push_back(row);
         }
         pzlReader.close();
@@ -105,6 +113,17 @@ void printPuzzles(){
         cout << endl;
 
     } 
+}
+
+void printKosong(){
+
+    for(int i = 0; i < N; i++){
+        vector <char> row1 = kosong[i];
+        for(int j = 0; j < M; j++){
+            cout<< row1[j]<<" ";
+        }
+        cout<<endl;
+    }
 }
 
 // FUNGSI UNTUK MEMBACA DAFTAR KATA YANG HARUS DICARI DARI INPUT FILE
@@ -144,73 +163,39 @@ int min(int a, int b){
     return b;
 }
 
-// FUNGSI UNTUK MENCARI KATA PADA PUZZLE SECARA HORIZONTAL
-
-// void cariHorizontal(int r, int c){
-
-//     string test1 = "";
-//     string test2 = "";
-
-//     for (int i= 0; i < min(M-c,maxLength); i++){
-//         test1 = test1 + puzzle[r][c+i];
-//         test2 = puzzle[r][c+1] + test2;
-//         if ((i+1) >= minLength){
-//             checkWord(test1);
-//             checkWord(test2);
-//         }
-//     }
-// }
-
-// FUNGSI UNTUK MENCARI KATA
-
-// void cariKata(){
-//     for (int r = 0; r < N; r++){
-//         for (int c = 0; c < M; c++){
-//             cariHorizontal(r, c);
-//         }
-//     }
-// }
-
-// FUNGSI UNTUK MENAMPILKAN JAWABAN KE LAYAR
-
-// void printKata(string filename){
-//     ofstream wordprinter (filename);
-//     if (wordprinter.is_open()){
-//         for(auto const& i: words){
-//             wordprinter << i  << endl;
-//         }
-//         wordprinter.close();
-//     }
-// }
-
 // BRUTE FORCE ALGORITHM
 
-int x[] = { -1, -1, -1, 0, 0, 1, 1, 1 }; 
-int y[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
+int x[] = { -1, -1, -1, 0, 0,  1, 1, 1 }; 
+int y[] = { -1,  0,  1,-1, 1, -1, 0, 1 };
+
 
 bool search2D(vector<vector<char>> pzl, int row, int col, string word){
-    
-    
+
+    kosong1 = kosong;
+
     if(pzl[row][col] != word[0]){
+        kosong = kosong1;
         return false;
     }
 
     int len = word.length();
-
+    
     for (int dir = 0; dir < 8; dir++){
-        
         int k, rd = row + x[dir], cd = col + y[dir];
-
-        for(k = 1; k< len; k++){
+        for(k = 1; k < len; k++){
             if (rd >= N || rd < 0 || cd >= M || cd < 0){
+                kosong = kosong1;
                 break;
             }
-
             if (pzl[rd][cd] != word[k]){
+                kosong = kosong1;
                 break;
             }
-            rd += x[dir], cd += y[dir];
+            kosong[row][col] = pzl[row][col];
+            kosong[rd][cd] = pzl[rd][cd];
+            rd += x[dir], cd += y[dir]; 
         }
+        
         if(k == len){
             return true;
         }
@@ -219,11 +204,20 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word){
 }
 
 void cariKata(vector<vector<char>> pzl){
+    
+    bool status = false;
     for (int row = 0; row < N; row++){
         for (int col = 0; col < M; col++){
             if (search2D(puzzle, row, col, wordlist[0])){
-                cout << "text found"<<endl;
-            } 
+                status = true;
+            }
         } 
-    }         
+    } 
+
+    if (status == true){
+        cout<<"text found"<<endl;
+    }else{
+        cout<<"text not found"<<endl;
+    }
 }
+
