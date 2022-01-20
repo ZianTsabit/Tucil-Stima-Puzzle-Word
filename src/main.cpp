@@ -18,11 +18,11 @@ int N = 0; // jumlah baris
 int M = 0; // jumlah kolom 
 
 vector<string> wordlist;		// unordered list untuk menyimpan kata yang ingin dicari	
-vector<vector<char>> kosong;
-vector<vector<char>> kosong1;    // array dua dimensi untuk menyimpan puzzle
-vector<vector<char>> puzzle;    // array dua dimensi untuk menyimpan puzzle
-vector<vector<char>> jawaban;      
+vector<vector<char>> answers;
+vector<vector<char>> temp;    // array dua dimensi untuk menyimpan puzzle
+vector<vector<char>> puzzle;    // array dua dimensi untuk menyimpan puzzle      
 set<string> words;
+
 
 void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
@@ -31,27 +31,58 @@ void printKata(string filename);
 
 
 void printPuzzles();
-void printKosong();
+void printHasil();
 void printDaftarKata();
 
 // FUNGSI UTAMA PROGRAM
 
 int main(){
-    cout<<"***********SELAMAT DATANG DI WORD SEARCH PUZZLE GAME***********" <<endl;
     
-    cout<<endl;
-    
-    bacaPuzzle("../test/input_puzzle.txt");
-    printPuzzles();
-    
+    cout<<"                                                               " <<endl;
+    cout<<"                                                               " <<endl;
+    cout<<"                                                               " <<endl;
+    cout<<"         ___           ___               __                    " <<endl;
+    cout<<"         \\  \\    _    /  /              |  |                 " <<endl;
+    cout<<"          \\  \\  / \\  /  /____  ____   __|  |                " <<endl;
+    cout<<"           \\  \\/   \\/  /  _  \\/   __\\/  _  |      __      " <<endl;
+    cout<<"            \\         /| (_) |   |  |  (_) |     |  |         " <<endl;
+    cout<<"             \\___/\\__/ \\_____/|__|   \\_____|____ |  |__    " <<endl;
+	cout<<"                  /  __|/ _ \\ / _  `|/  __\\/  __\\|     |    " <<endl;
+    cout<<"                  \\__  \\  __/| (_|  |  |  |  (__ |  |  |     " <<endl;
+    cout<<"           _____  \\____/\\___|\\____,_|__|   \\____/|__|__|	  " <<endl;
+    cout<<"          /  _  \\      ________________   __                  " <<endl;
+    cout<<"         |  (_)  |    /____   /____   /  |  |                  " <<endl;
+    cout<<"         |   ___/__ __    /  /    /  /   |  |    _____         " <<endl;
+    cout<<"         |  |   |  |  |  /  /    /  /    |  |   /  _  \\       " <<endl;
+    cout<<"         |  |   |  |  | /  /____/  /_____|  |___   ___/        " <<endl;
+    cout<<"         |__|   \\_____//_______/________/|______|\\____|      " <<endl;
+    cout<<"                                                               " <<endl;
+    cout<<"                                                               " <<endl;
+    cout<<"                  oleh : Ghazian Tsabit Alkamil                " <<endl;
+    cout<<"                                                               " <<endl;
+    cout<<"                                                               " <<endl;
     
 
     cout<<endl;
     
-    cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
+    string filepath;
+    cout<<"input path file: ";
+    
+    cin>>filepath;
+
+    bacaPuzzle("../test/"+filepath);
+    
+    cout<<endl;
+
+    printPuzzles();
+    
     cout<<endl;
     
-    bacaDaftarKata("../test/input_puzzle.txt");
+    cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
+    
+    cout<<endl;
+    
+    bacaDaftarKata("../test/"+filepath);
     
     printDaftarKata();
 
@@ -63,7 +94,7 @@ int main(){
     
     cout<<endl;
 
-    printKosong();
+    printHasil();
     
     
 }
@@ -94,7 +125,7 @@ void bacaPuzzle(string filename){
                 row.push_back(line[i]);
                 row1.push_back('-');
             }
-            kosong.push_back(row1);
+            answers.push_back(row1);
             puzzle.push_back(row);
         }
         pzlReader.close();
@@ -115,10 +146,10 @@ void printPuzzles(){
     } 
 }
 
-void printKosong(){
+void printHasil(){
 
     for(int i = 0; i < N; i++){
-        vector <char> row1 = kosong[i];
+        vector <char> row1 = answers[i];
         for(int j = 0; j < M; j++){
             cout<< row1[j]<<" ";
         }
@@ -171,10 +202,10 @@ int y[] = { -1,  0,  1,-1, 1, -1, 0, 1 };
 
 bool search2D(vector<vector<char>> pzl, int row, int col, string word){
 
-    kosong1 = kosong;
+    temp = answers;
 
     if(pzl[row][col] != word[0]){
-        kosong = kosong1;
+        answers = temp;
         return false;
     }
 
@@ -184,15 +215,15 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word){
         int k, rd = row + x[dir], cd = col + y[dir];
         for(k = 1; k < len; k++){
             if (rd >= N || rd < 0 || cd >= M || cd < 0){
-                kosong = kosong1;
+                answers = temp;
                 break;
             }
             if (pzl[rd][cd] != word[k]){
-                kosong = kosong1;
+                answers = temp;
                 break;
             }
-            kosong[row][col] = pzl[row][col];
-            kosong[rd][cd] = pzl[rd][cd];
+            answers[row][col] = pzl[row][col];
+            answers[rd][cd] = pzl[rd][cd];
             rd += x[dir], cd += y[dir]; 
         }
         
@@ -213,11 +244,5 @@ void cariKata(vector<vector<char>> pzl){
             }
         } 
     } 
-
-    if (status == true){
-        cout<<"text found"<<endl;
-    }else{
-        cout<<"text not found"<<endl;
-    }
 }
 
