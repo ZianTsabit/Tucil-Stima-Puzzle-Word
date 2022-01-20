@@ -44,7 +44,7 @@ int main(){
     cout<<"DAFTAR KATA YANG HARUS DICARI:" <<endl;
     cout<<endl;
     
-    bacaDaftarKata("input_kata.txt");
+    bacaDaftarKata("input_puzzle.txt");
     
     printDaftarKata();
 
@@ -61,7 +61,8 @@ void bacaPuzzle(string filename){
     if (pzlReader.is_open()){
         while (getline(pzlReader, line)){
             
-            if(line.empty()){
+            
+            if(line.size() == 1){
                 break;
             }
 
@@ -108,9 +109,15 @@ void bacaDaftarKata(string filename){
     ifstream ktReader(filename);
 
     string kata;
+    
     if (ktReader.is_open()){
+        
         while (getline(ktReader, kata)){
-            wordlist.insert(kata);
+            if (kata.size() == 1){
+                while(getline(ktReader, kata)){
+                    wordlist.insert(kata);
+                }
+            }
         }
         ktReader.close();
     }
