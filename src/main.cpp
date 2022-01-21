@@ -1,19 +1,16 @@
-#include <iostream> //input output
-#include <vector> //dynamically allocated array
-#include <string> //string
-#include <fstream> //file open
-#include <algorithm> // hapus kata dari spasi
+#include <iostream> 
+#include <vector> 
+#include <string> 
+#include <fstream> 
+#include <algorithm> 
 #include <ostream>
 #include <cstdlib>
 #include <filesystem>
-
+#include <stdlib.h>
 #include <unordered_set>
 #include <set>
 
 using namespace std;
-
-const int minLength = 2;
-const int maxLength = 50;
 
 int N = 0; // jumlah baris
 int M = 0; // jumlah kolom 
@@ -29,8 +26,6 @@ void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
 void cariKata(vector<vector<char>> puzzle, vector<string> word);
 void printKata(string filename);
-
-
 void printPuzzles();
 void printHasil();
 void printDaftarKata();
@@ -94,8 +89,11 @@ int main(){
         cariKata(puzzle, wordlist);
         
     }else{
-        cout<<"file tidak ditemukan, pastikan nama file sudah tepat !"<<endl;
+        cout<<"File tidak ditemukan, pastikan nama file sudah tepat !"<<endl;
     }
+
+    //system("pause");
+    return 0; 
 }
 
 // FUNGSI UNTUK MEMBACA PUZZLE DARI INPUT FILE
