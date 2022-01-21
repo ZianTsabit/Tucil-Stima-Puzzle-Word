@@ -27,13 +27,14 @@ set<string> words;
 
 void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
-void cariKata(vector<vector<char>> puzzle, string word);
+void cariKata(vector<vector<char>> puzzle, vector<string> word);
 void printKata(string filename);
 
 
 void printPuzzles();
 void printHasil();
 void printDaftarKata();
+void searchAnswers();
 
 // FUNGSI UTAMA PROGRAM
 
@@ -88,15 +89,12 @@ int main(){
         cout<<endl;
         cout<<"================RESULT==============" <<endl;
         cout<<endl;
-        cout<<"Loading...";
+        cout<<"Loading..."<<endl;
         cout<<endl;
-        for (int i = 0; i < wordlist.size(); i++){
-            cariKata(puzzle,wordlist[i]);
-        }
+        cariKata(puzzle, wordlist);
         
-
     }else{
-        cout<<"file tidak tersedia, pastikan nama file sudah tepat !"<<endl;
+        cout<<"file tidak ditemukan, pastikan nama file sudah tepat !"<<endl;
     }
 }
 
@@ -186,22 +184,13 @@ void printDaftarKata(){
     } 
 }
 
-// FUNGSI MIN ANTAR DUA INTEGER
-
-int min(int a, int b){
-    if (a < b){
-        return a;
-    }
-    return b;
-}
-
 // BRUTE FORCE ALGORITHM
 
 int x[] = { -1, -1, -1, 0, 0,  1, 1, 1 }; 
 int y[] = { -1,  0,  1,-1, 1, -1, 0, 1 };
 
 
-bool search2D(vector<vector<char>> pzl, int row, int col, string word){
+bool search2D(vector<vector<char>> pzl, int row, int col, string word, int z){
 
     temp = answers;
 
@@ -209,8 +198,13 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word){
         answers = temp;
         return false;
     }
-
-    int len = word.length();
+    int len;
+    if(z != wordlist.size()-1){
+        len = word.length()-1;
+    }else{
+        len = word.length();
+    }
+    
     
     for (int dir = 0; dir < 8; dir++){
         int k, rd = row + x[dir], cd = col + y[dir];
@@ -229,22 +223,29 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word){
         }
         
         if(k == len){
+            k = 1;
+            dir = 0;
             return true;
         }
     }
     return false;
 }
 
-void cariKata(vector<vector<char>> pzl, string word){
+void cariKata(vector<vector<char>> pzl, vector<string> wordlist){
     
-    for (int row = 0; row < N; row++){
-        for (int col = 0; col < M; col++){
-            if (search2D(puzzle, row, col, word)){
-                printHasil();
-                answers = temp;
-                cout<<endl;
-            }
+    bool status = false;
+    for(int i = 0; i < wordlist.size(); i++){
+        for (int row = 0; row < N; row++){
+            for (int col = 0; col < M; col++){
+                if (search2D(puzzle, row, col, wordlist[i], i)){
+                    status = true;
+                    cout<<wordlist[i]<<endl;
+                    cout<<endl;
+                    printHasil();
+                    cout<<endl;
+                    answers = temp;
+                }
+            }              
         } 
     }
 }
-
