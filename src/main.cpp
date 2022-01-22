@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <unordered_set>
 #include <set>
+#include <cstdio>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ void searchAnswers();
 
 // FUNGSI UTAMA PROGRAM
 
-int main(){
+int main(int argc, char* argv[]){
     
     cout<<"                                                               " <<endl;
     cout<<"                                                               " <<endl;
@@ -93,6 +94,12 @@ int main(){
     }
 
     //system("pause");
+    char ch;
+    while (cin.readsome(&ch, 1) != 0)
+        ;
+    cout << "Press any key to continue..."<<endl;
+    getchar();
+    getchar();
     return 0; 
 }
 
