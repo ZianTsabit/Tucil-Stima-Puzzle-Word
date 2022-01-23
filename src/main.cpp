@@ -10,18 +10,20 @@
 #include <unordered_set>
 #include <set>
 #include <cstdio>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 int N = 0; // jumlah baris
-int M = 0; // jumlah kolom 
+int M = 0; // jumlah kolom
+int totCompare = 0;
 
 vector<string> wordlist;		// unordered list untuk menyimpan kata yang ingin dicari	
 vector<vector<char>> answers;
 vector<vector<char>> temp;    // array dua dimensi untuk menyimpan puzzle
 vector<vector<char>> puzzle;    // array dua dimensi untuk menyimpan puzzle      
 set<string> words;
-
 
 void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
@@ -87,7 +89,9 @@ int main(int argc, char* argv[]){
         cout<<endl;
         cout<<"Loading..."<<endl;
         cout<<endl;
+        
         cariKata(puzzle, wordlist);
+        
         
     }else{
         cout<<"File tidak ditemukan, pastikan nama file sudah tepat !"<<endl;
@@ -201,6 +205,7 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word, int z){
 
     if(pzl[row][col] != word[0]){
         answers = temp;
+        totCompare++;
         return false;
     }
     int len;
@@ -216,17 +221,20 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word, int z){
         for(k = 1; k < len; k++){
             if (rd >= N || rd < 0 || cd >= M || cd < 0){
                 answers = temp;
+                totCompare++;
                 break;
             }
             if (pzl[rd][cd] != word[k]){
                 answers = temp;
+                totCompare++;
                 break;
             }
             answers[row][col] = pzl[row][col];
             answers[rd][cd] = pzl[rd][cd];
-            rd += x[dir], cd += y[dir]; 
+            rd += x[dir], cd += y[dir];
+            totCompare++; 
         }
-        
+        totCompare++;
         if(k == len){
             k = 1;
             dir = 0;
@@ -239,7 +247,9 @@ bool search2D(vector<vector<char>> pzl, int row, int col, string word, int z){
 void cariKata(vector<vector<char>> pzl, vector<string> wordlist){
     
     bool status = false;
+    
     for(int i = 0; i < wordlist.size(); i++){
+        auto start = high_resolution_clock::now();
         for (int row = 0; row < N; row++){
             for (int col = 0; col < M; col++){
                 if (search2D(puzzle, row, col, wordlist[i], i)){
@@ -247,6 +257,12 @@ void cariKata(vector<vector<char>> pzl, vector<string> wordlist){
                     cout<<wordlist[i]<<endl;
                     cout<<endl;
                     printHasil();
+                    cout<<endl;
+                    auto stop = high_resolution_clock::now();
+                    auto duration = duration_cast<microseconds>(stop - start);
+                    cout << "Waktu eksekusi: "<< duration.count()/1000 << " milisekon" << endl;
+                    cout << "Total perbandingan huruf: "<< totCompare <<endl;
+                    totCompare = 0;
                     cout<<endl;
                     answers = temp;
                 }
