@@ -1,6 +1,7 @@
 # Tugas Kecil 1 - IF 2211 Strategi Algoritma - Word Search Puzzle
 
 ## Deskripsi Singkat Program
+
 Program dalam bahasa c++ yang dibuat untuk menyelesaikan Word Search Puzzle
 dengan mengimplementasikan Algoritma Brute Force pada mata kuliah IF2211 Strategi 
 Algoritma. Program akan membaca file yang berisi puzzle dan kata kata yang akan dicari,
@@ -16,7 +17,7 @@ Jika menggunakan linux berdistro ubuntu, gunakan perintah berikut:
 sudo apt install build-essential
 ```
 
-# Cara Penggunaan Program
+## Cara Penggunaan Program
 
 Lakukan kompilasi terhadap source code dengan perintah
 
@@ -27,13 +28,17 @@ Jalankan file executable hasil kompilasi dengan perintah
 `./<nama-file-executable>.exe`
 
 1. Menggunakan test case yang telah tersedia
+
 Masukkan nama file yang terdapat dalam folder test dengan tepat ketika program telah dijalankan.
 
 2. Menggunakan test case yang baru
+
 Simpan file yang ingin di uji pada folder test, kemudian masukkan nama file tersebut dengan tepat
 ketika program telah dijalankan.
 
-# Author
+## Author
 Nama  : Ghazian Tsabit Alkamil
+<br>
 NIM   : 13520165
+<br>
 Kelas : IF2211-K03
