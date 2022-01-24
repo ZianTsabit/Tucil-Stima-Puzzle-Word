@@ -19,11 +19,10 @@ int N = 0; // jumlah baris
 int M = 0; // jumlah kolom
 int totCompare = 0;
 
-vector<string> wordlist;		// unordered list untuk menyimpan kata yang ingin dicari	
-vector<vector<char>> answers;
-vector<vector<char>> temp;    // array dua dimensi untuk menyimpan puzzle
+vector<string> wordlist;		// vektor untuk menyimpan kata yang harus dicari	
+vector<vector<char>> answers; // vektor dua dimensi yang menyimpan hasil dari algoritma pencarian kata
+vector<vector<char>> temp;    // array dua dimensi untuk menyimpan matriks kosong
 vector<vector<char>> puzzle;    // array dua dimensi untuk menyimpan puzzle      
-set<string> words;
 
 void bacaDaftarKata(string filename);
 void bacaPuzzle(string filename);
